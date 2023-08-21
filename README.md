@@ -20,22 +20,22 @@
   Nếu gán cho biến một giá trị lớn hơn giới hạn kiểu dữ liệu của biến, chương trình sẽ báo lỗi.
   
   Ví dụ:
+  ```c
+  #include <stdio.h>
+  #include <stdint.h>
+
+  uint8_t var;
+
+  int main()
+  {
+      var = 10;
   
-    #include <stdio.h>
-    #include <stdint.h>
-
-    uint8_t var;
-
-    int main(int argc, char const *argv[])
-    {
-        var = 10;
-    
-        printf("Gia tri cua var: %d", var);
-        return 0;
-    }
-
+      printf("Gia tri cua var: %d", var);
+      return 0;
+  }
+  ```
   output:
-
+  
     Gia tri cua var: 10
   ***
   ### typedef
