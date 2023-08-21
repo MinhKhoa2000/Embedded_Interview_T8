@@ -34,22 +34,152 @@
       return 0;
   }
   ```
-  output:
+  Output:
   
     Gia tri cua var: 10
+    
   ***
   ### typedef
+  `typedef` là một từ khóa dùng để định nghĩa lại tên của một kiểu dữ liệu, cung cấp cho kiểu dữ liệu có sẵn một tên mới nhằm thuận tiện cho việc viết code.
+
+  Ví dụ:
+  ```c
+  #include <stdio.h>
+  #include <stdint.h>
   
+  typedef int number;
+  
+  int main(int argc, char const *argv[])
+  {
+      number var = 100;
+  
+      printf("Gia tri cua var: %d", var);
+      return 0;
+  }
+  ```
+
+  Output:
+  
+    Gia tri cua var: 100
+    
   ***
   ### Câu điều kiện
   #### 1. if
-  
-  #### 2. else
-  
+  Cú pháp:
+  ```c
+  if(Điều kiện) {Khối lệnh}
+  ```
+  Câu lệnh `if` sẽ kiểm tra "Điều kiện", "Khối lệnh" chỉ được thực thi khi "Điều kiện" đúng.
+
+  Ví dụ:
+  ```c
+  int i = 20;
+
+  if (i > 10)
+  {
+      printf("i lon hon 10");
+  }
+  ```
+  Output:
+
+    i lon hon 10
+
+  #### 2. if ... else
+  Cú pháp:
+  ```c
+  if(Điều kiện) {Khối lệnh 1}
+  else {Khối lệnh 2}
+  ```
+  "Điều kiện" đúng sẽ thực thi "Khối lệnh 1", sai sẽ thực thi "Khối lệnh 2".
+
+  Ví dụ:
+  ```c
+  int i = 5;
+
+  if (i > 10)
+  {
+      printf("i lon hon 10");
+  }
+  else
+  {
+      printf("i nho hon 10");
+  }
+  ```
+  Output:
+
+    i nho hon 10
+    
   #### 3. else if
-  
+  Muốn kiểm tra nhiều điều kiện hơn có thể sử dụng cú pháp `else if`:
+  ```c
+  if(Điều kiện 1) {Khối lệnh 1}
+  else if(Điều kiện 2) {Khối lệnh 2}
+  else {Khối lệnh 3}
+  ```
+  Ví dụ:
+  ```c
+  int i = 10;
+
+  if (i > 10)
+  {
+      printf("i lon hon 10");
+  }
+  else if (i == 10)
+  {
+      printf("i bang 10");
+  }
+  else
+  {
+      printf("i nho hon 10");
+  }
+  ```
+  Output:
+
+    i bang 10
+    
   #### 4. switch case
+  Cú pháp:
+  ```c
+  switch (expression)
+  ​{
+     case constant1:
+       // statements
+       break;
+     case constant2:
+       // statements
+       break;
+     default:
+       // default statements
+  }
+  ```
+  - `expression` sẽ được so sánh với các giá trị của các `case`.
+  - Nếu giá trị của `case` khớp với `expression`, các khối lệnh tương ứng sau case đó sẽ được thực hiện cho tới khi gặp lệnh `break`.
+  - Nếu không sử dụng `break` thì tất cả các case kể từ case khớp giá trị đều được thực hiện.
+  - `default` sẽ được thực hiện nếu không có case nào khớp giá trị với `expression`.
   
+  Ví dụ:
+  ```c
+  int i = 2;
+
+  switch (i)
+  {
+  case 1:
+      printf("case 1");
+      break;
+  
+  case 2:
+      printf("case 2");
+      break;
+      
+  default:
+      printf("default");
+      break;
+  }
+  ```
+  Output:
+  
+    case 2
+
   ***
   ### enum
   
