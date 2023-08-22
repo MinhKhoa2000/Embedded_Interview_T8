@@ -290,11 +290,36 @@ Output:
 0  1  2  3  4
 ```
 #### 3. do while
-Tương tự như vòng lặp `while` nhưng khối lệnh sẽ được thực thi trước rồi mới kiểm tra điều kiện
+Tương tự như vòng lặp `while` nhưng khối lệnh sẽ được thực thi trước rồi mới kiểm tra điều kiện lặp.
 
 Cú pháp:
 ```c
-
+do
+{
+    // Khối lệnh cần lặp
+}
+while (điều kiện lặp)
 ```
+Ví dụ:
+```c
+int i = 0;
+do
+{
+    printf("do ... while loop");
+} while (i != 0);
+
+printf("\n----------\n");
+
+while (i != 0)
+{
+    printf("while loop");
+}
+```
+Output:
+```
+do ... while loop
+----------
+```
+Có thể thấy, chỉ có khối lệnh của vòng lặp `do while` được thực hiện.
 ***
 </details>
