@@ -4,8 +4,8 @@
 #define CHECK_IF(vat_pham) \
     if (vat_pham & item)\
     {\
-        if (vat_pham & bag) printf("- %s da co\n", #vat_pham);\
-        else printf("- %s chua co\n", #vat_pham);\
+        if (vat_pham & bag) printf("- %s :da co\n", #vat_pham);\
+        else printf("- %s :chua co\n", #vat_pham);\
     }
 
 
@@ -80,6 +80,7 @@ void show_item (uint8_t bag){
         }
     }
     
+    printf("\n");
 }
 
 int main(int argc, char const *argv[])
