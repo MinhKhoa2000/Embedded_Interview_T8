@@ -673,7 +673,7 @@ Trong khi đó các biến khai báo trong chương trình thì đặt ở bộ 
 2. Yêu cầu ALU xử lý register vừa được nạp giá trị.
 3. Đưa kết quả vừa xử lý của ALU ra ngoài vùng nhớ chứa biến.
 
-![](https://khuenguyencreator.com/wp-content/uploads/2021/09/register-.jpg)
+![](http://www.avr-asm-tutorial.net/avr_gra/sram.gif)
 
 Khi thêm từ khóa register để khai báo biến, thì tức là ta đã yêu cầu trình biên dịch ưu tiên đặc biệt dành luôn vùng register để chứa biến đó. Và hiển nhiên khi thực hiện tính toán trên biến đó thì giảm được bước 1 và 3, giảm bớt thủ tục vậy nên hiệu năng tăng lên.
 ***
