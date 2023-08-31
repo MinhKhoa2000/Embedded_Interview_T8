@@ -603,10 +603,80 @@ i = 3
 ```
 ***
 ### 2. Extern
+Trong C, khi 1 biến đi sau từ khóa “extern” có nghĩa là:
+- Nó là tham chiếu của một biến,hàm cùng tên nào đó, đã được định nghĩa bên ngoài. Nó chỉ khai báo chứ không định nghĩa ( cấp phát bộ nhớ cho biến ).
+- Biến được tham chiếu phải được khai báo ở cấp độ cao nhất (toàn cục), và có thể nằm trong một file khác.
+Trong C, một chương trình lớn có thể được chia thành các module nhỏ hơn, các module này có thể được biên dịch riêng lẻ và được liên kết lại với nhau. Điều này được thực hiện nhằm tăng tốc độ quá trình biên dịch các chương trình lớn.
 
+Tuy nhiên, khi các module được liên kết, các tập tin phải được chương trình thông báo cho biết về các biến toàn cục được yêu cầu. Một biến toàn cục chỉ có thể được khai báo một lần. Nếu hai biến toàn cục có cùng tên được khai báo trong cùng một tập tin, một thông điệp lỗi ‘duplicate variable name’ (tên biến trùng) có thể được hiển thị hoặc đơn giản trình biên dịch C chọn một biến khác.
+
+Để sử dụng được biến toàn cục ở một file khác, chúng ta phải khai báo lại biến và thêm từ khóa extern phía trước, để báo rằng biến này đã được khi báo ở file khác.
+
+Cú pháp: `extern <kiểu dữ liệu> <Tên Biến>;`
+
+Lưu ý:
+- Khi sử dụng extern, không được khai báo giá trị ban đầu cho biến.
+- Extern không thể tham chiếu được các biến static của file khác.
+
+Ví dụ:    
+File 1 ta khai báo các biến và hàm:
+```c
+#include <stdio.h>
+
+int value = 0;
+
+void check()
+{
+    printf("Hello!\n");
+}
+```
+Ở file 2, ta dùng extern để gọi các biến và hàm ở file 1:
+```c
+#include <stdio.h>
+
+extern int value;
+
+extern void check();
+
+int main(int argc, char const *argv[])
+{
+    value = 20;
+    printf("%d\n", value);
+
+    check();
+
+    return 0;
+}
+```
+Kết quả:
+```c
+20
+Hello!
+```
+***
 ### 3. Volatile
+Volatile có nghĩa là không dự đoán được. Một biến sử dụng với volatile qualifier có nghĩa là nói với compiler là biến này có thể sẽ được thay đổi ở bất kì chỗ nào.
 
+Một biến cần được khai báo dưới dạng biến volatile khi mà giá trị của nó có thể thay đổi một cách không báo trước. Việc khai báo biến volatile là rất cần thiết để tránh những lỗi sai khó phát hiện do tính năng optimization của compiler.
+
+Cú pháp: `volatile <kiểu dữliệu> <tên dữ liệu>;`
+***
 ### 4. Register
+Tác dụng của từ khóa register, nói một cách ngắn gọn là làm tăng hiệu năng(performance) của chương trình.
+
+Cú pháp: `register <kiểu dữ liệu> <tên biến>;`
+
+Trong kiến trúc của vi xử lý thì ALU (Arithmetic Logic Unit) đóng vai trò xử lý các tính toán số học. Dữ liệu đưa vào làm việc với ALU phải chứa trong một vùng đặc biệt, gọi là các thanh ghi(register), và ALU chỉ làm việc với đống thanh ghi đó.
+
+Trong khi đó các biến khai báo trong chương trình thì đặt ở bộ nhớ ngoài (RAM chẳng hạn …). Do đó với khai báo biến thông thường, để thực hiện một phép tính thì cần có 3 bước.
+1. Nạp giá trị từ vùng nhớ chứa biến vào register
+2. Yêu cầu ALU xử lý register vừa được nạp giá trị.
+3. Đưa kết quả vừa xử lý của ALU ra ngoài vùng nhớ chứa biến.
+
+![](https://khuenguyencreator.com/wp-content/uploads/2021/09/register-.jpg)
+
+Khi thêm từ khóa register để khai báo biến, thì tức là ta đã yêu cầu trình biên dịch ưu tiên đặc biệt dành luôn vùng register để chứa biến đó. Và hiển nhiên khi thực hiện tính toán trên biến đó thì giảm được bước 1 và 3, giảm bớt thủ tục vậy nên hiệu năng tăng lên.
+***
 </details>
 
 <details>
