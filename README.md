@@ -519,12 +519,94 @@ Output:
 
 <details>
 <summary>Bài 3: Phân vùng nhớ</summary>
-
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Program_memory_layout.pdf/page1-225px-Program_memory_layout.pdf.jpg">
+    
+### 1. Phân vùng text
+– Quyền truy cập chỉ Read và nó chứa lệnh để thực thi nên tránh sửa đổi instruction.
+– Chứa khai báo hằng số trong chương trình (.rodata).
+### 2. Phân vùng data
+– Quyền truy cập là read-write.
+– Chứa biến toàn cục or biến static với giá trị khởi tạo khác không.
+– Được giải phóng khi kết thúc chương trình.
+### 4. Phân vùng Bss
+– Quyền truy cập là read-write.
+– Chứa biến toàn cục or biến static với giá trị khởi tạo bằng không or không khởi tạo.
+– Được giải phóng khi kết thúc chương trình.
+### 5. Phân vùng Stack
+– Quyền truy cập là read-write.
+– Được sử dụng cấp phát cho biến local, input parameter của hàm,…
+– Sẽ được giải phóng khi ra khỏi block code/hàm
+### 6. Phân vùng Heap
+– Quyền truy cập là read-write.
+– Được sử dụng để cấp phát bộ nhớ động như: Malloc, Calloc, …
+– Sẽ được giải phóng khi gọi hàm free,...
+***
 </details>
 
 <details>
-<summary>Bài 4: Biến</summary>
+<summary>Bài 4: Các dạng khai báo biến đặc biệt</summary>
 
+### 1. Static
+- Biến static hay biến tĩnh, được tạo ra bên trong một khối lệnh có khả năng lưu giữ giá trị của nó cho dù chương trình đã chạy ra bên ngoài khối lệnh chứa nó.
+- Khi 1 biến cục bộ được khai báo với từ khóa static. Biến sẽ chỉ được khởi tạo 1 lần duy nhất và tồn tại suốt thời gian chạy chương trình. Giá trị của nó không bị mất đi ngay cả khi kết thúc hàm.
+- Tuy nhiên khác với biến toàn cục có thể gọi trong tất cả mọi nơi trong chương trình, thì biến cục bộ static chỉ có thể được gọi trong nội bộ hàm khởi tạo ra nó. Mỗi lần hàm được gọi, giá trị của biến chính bằng giá trị tại lần gần nhất hàm được gọi.
+- Cú pháp: `static <kiểu dữ liệu> <tên biến>;`
+     
+Ví dụ:    
+Không sử dụng static:
+```c
+#include <stdio.h>
+
+void sum()
+{
+    int i = 0;
+    i++;
+    printf("i = %d\n", i);
+}
+
+int main(int argc, char const *argv[])
+{
+    sum();
+    sum();
+    sum();
+    return 0;
+}
+```
+```c
+i = 1
+i = 1
+i = 1
+```
+Sử dụng static:
+```c
+#include <stdio.h>
+
+void sum()
+{
+    static int i = 0;
+    i++;
+    printf("i = %d\n", i);
+}
+
+int main(int argc, char const *argv[])
+{
+    sum();
+    sum();
+    sum();
+    return 0;
+}
+```
+```c
+i = 1
+i = 2
+i = 3
+```
+***
+### 2. Extern
+
+### 3. Volatile
+
+### 4. Register
 </details>
 
 <details>
