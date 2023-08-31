@@ -101,10 +101,11 @@ void find_replaceString (char string[], char s_Find[], char s_Replace[])
 
     printf("\n");
 
-    printf("Find: %s\nReplace: %s\n", s_Find, s_Replace);
+    printf("- Find: %s\n- Replace: %s\n", s_Find, s_Replace);
 
     uint8_t replace_time = 0;
 
+    //tim doan can replace co trong string khong?
     for (uint8_t i = 0; i < sizeString; i++)
     {
         for (uint8_t j = 0; j < sizeFind; j++)
@@ -117,30 +118,82 @@ void find_replaceString (char string[], char s_Find[], char s_Replace[])
 
     if (replace_time != 0)
     {
-        printf("Tim thay chuoi can thay the!\n");
+        printf("!Tim thay chuoi can thay the!\n");
 
         for (uint8_t i = 0; i < sizeString; i++)
         {
             for (uint8_t j = 0; j < sizeFind; j++)
             {
-                if (string[i + j] != s_Find[j])
-                {
-                    printf("%c", string[i]);
-
-                    break;
-                }
+                if (string[i + j] != s_Find[j]) break;
 
                 else if (j == sizeFind - 1)
                 {
-                    printf("%s", s_Replace);
+                    if (sizeReplace < sizeFind)
+                    {
+                        //gan replace vao string
+                        for (uint8_t k = 0; k < sizeReplace; k++)
+                        {
+                            string[i + k] = s_Replace[k];
+                        }
+                        
+                        //rut ngan string
+                        for (uint8_t k = i + sizeFind; k < sizeString; k++)
+                        {
+                            string[k - sizeFind + sizeReplace] = string[k];
 
-                    i += sizeFind - 1;
+                            if (k == sizeString - 1)
+                            {
+                                string[k - sizeFind + sizeReplace + 1] = '\0';
+                            }
+                        }
+
+                        //tro i vao vi tri sau doan dc replace
+                        i += sizeReplace - 1;
+
+                        //thay doi do dai string
+                        sizeString -= sizeFind - sizeReplace;
+                    }
+                    
+                    else if (sizeReplace > sizeFind)
+                    {
+                        //keo dai string
+                        for (uint8_t k = sizeString; k > i + sizeFind - 1; k--)
+                        {
+                            string[k + sizeReplace - sizeFind] = string[k];
+                        }
+
+                        //gan replace vao string
+                        for (uint8_t k = 0; k < sizeReplace; k++)
+                        {
+                            string[i + k] = s_Replace[k];
+                        }
+
+                        //tro i vao vi tri sau doan dc replace
+                        i += sizeReplace - 1;
+
+                        //thay doi do dai string
+                        sizeString += sizeReplace - sizeFind;
+                    }
+                    
+                    else
+                    {
+                        //gan replace vao string
+                        for (uint8_t k = 0; k < sizeReplace; k++)
+                        {
+                            string[i + k] = s_Replace[k];
+                        }
+
+                        //tro i vao vi tri sau doan dc replace
+                        i += sizeReplace - 1;
+                    }
                 }
             }
         }
+
+        printf("%s", string);
     }
     
-    else printf("Khong tim thay chuoi can thay the!");
+    else printf("!Khong tim thay chuoi can thay the!");
     
     printf("\n\n");
 }

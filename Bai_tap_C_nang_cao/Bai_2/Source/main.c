@@ -14,7 +14,9 @@ int main(int argc, char const *argv[])
 
     find_replaceString(string, "is going to", "will");
 
-    find_replaceString(string, "hit", "will");
+    find_replaceString(string, "will", "is going to");
+
+    find_replaceString(string, "you", "she");
 
     return 0;
 }
