@@ -31,6 +31,8 @@ void countWord (char array[])
         if (array[flag] == ' ' || array[flag] == ',')
         {
             wordInfo[index].length = count;
+
+            wordInfo[index].status = true;
         
             wordInfo[++index].letter = array + flag + 1;
 
@@ -47,34 +49,36 @@ void countWord (char array[])
     }
 
     wordInfo[index].length = count;
-
+    
     printf("\n");
 
     for (uint8_t i = 0; i < size; i++)
     {
-        uint8_t count = 1;
+        int8_t count = 0;
 
-        if (wordInfo[i].length != 0 && wordInfo[i].status != false)
+        if (wordInfo[i].length > 0 && wordInfo[i].status != false)
         {
-            uint8_t check = 0;
-            
-            for (uint8_t j = i + 1; j < size; j++)
+
+            for (uint8_t j = i; j < size; j++)
             {
-                while (wordInfo[i].letter[check] == wordInfo[j].letter[check])
+                uint8_t check = 0;
+
+                if (wordInfo[i].length == wordInfo[j].length)
                 {
-                    check++;
-
-                    if (check == wordInfo[i].length)
+                    while (wordInfo[i].letter[check] == wordInfo[j].letter[check])
                     {
-                        count++;
+                        check++;
 
-                        wordInfo[j].status = false;
+                        if (check == wordInfo[i].length)
+                        {
+                            count++;
 
-                        break;
+                            wordInfo[j].status = false;
+
+                            break;
+                        }
                     }
                 }
-
-                check = 0;
             }
 
             for (int k = 0; k < wordInfo[i].length; k++)
@@ -83,9 +87,8 @@ void countWord (char array[])
             }
 
             printf("\t- So lan lap lai: %d\n", count);
-
-            count = 1;
         }
+
     }
 
     free(wordInfo);

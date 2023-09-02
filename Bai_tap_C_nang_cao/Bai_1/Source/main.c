@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "function.h"
 
-
 int main(int argc, char const *argv[])
 {
     char array[] = "mot hai ba, hai ba hai mot, ba bon hai, mot ba bon";
