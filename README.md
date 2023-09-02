@@ -603,10 +603,80 @@ i = 3
 ```
 ***
 ### 2. Extern
+Trong C, khi 1 biến đi sau từ khóa “extern” có nghĩa là:
+- Nó là tham chiếu của một biến,hàm cùng tên nào đó, đã được định nghĩa bên ngoài. Nó chỉ khai báo chứ không định nghĩa ( cấp phát bộ nhớ cho biến ).
+- Biến được tham chiếu phải được khai báo ở cấp độ cao nhất (toàn cục), và có thể nằm trong một file khác.
+Trong C, một chương trình lớn có thể được chia thành các module nhỏ hơn, các module này có thể được biên dịch riêng lẻ và được liên kết lại với nhau. Điều này được thực hiện nhằm tăng tốc độ quá trình biên dịch các chương trình lớn.
 
+Tuy nhiên, khi các module được liên kết, các tập tin phải được chương trình thông báo cho biết về các biến toàn cục được yêu cầu. Một biến toàn cục chỉ có thể được khai báo một lần. Nếu hai biến toàn cục có cùng tên được khai báo trong cùng một tập tin, một thông điệp lỗi ‘duplicate variable name’ (tên biến trùng) có thể được hiển thị hoặc đơn giản trình biên dịch C chọn một biến khác.
+
+Để sử dụng được biến toàn cục ở một file khác, chúng ta phải khai báo lại biến và thêm từ khóa extern phía trước, để báo rằng biến này đã được khi báo ở file khác.
+
+Cú pháp: `extern <kiểu dữ liệu> <Tên Biến>;`
+
+Lưu ý:
+- Khi sử dụng extern, không được khai báo giá trị ban đầu cho biến.
+- Extern không thể tham chiếu được các biến static của file khác.
+
+Ví dụ:    
+File 1 ta khai báo các biến và hàm:
+```c
+#include <stdio.h>
+
+int value = 0;
+
+void check()
+{
+    printf("Hello!\n");
+}
+```
+Ở file 2, ta dùng extern để gọi các biến và hàm ở file 1:
+```c
+#include <stdio.h>
+
+extern int value;
+
+extern void check();
+
+int main(int argc, char const *argv[])
+{
+    value = 20;
+    printf("%d\n", value);
+
+    check();
+
+    return 0;
+}
+```
+Kết quả:
+```c
+20
+Hello!
+```
+***
 ### 3. Volatile
+Volatile có nghĩa là không dự đoán được. Một biến sử dụng với volatile qualifier có nghĩa là nói với compiler là biến này có thể sẽ được thay đổi ở bất kì chỗ nào.
 
+Một biến cần được khai báo dưới dạng biến volatile khi mà giá trị của nó có thể thay đổi một cách không báo trước. Việc khai báo biến volatile là rất cần thiết để tránh những lỗi sai khó phát hiện do tính năng optimization của compiler.
+
+Cú pháp: `volatile <kiểu dữliệu> <tên dữ liệu>;`
+***
 ### 4. Register
+Tác dụng của từ khóa register, nói một cách ngắn gọn là làm tăng hiệu năng(performance) của chương trình.
+
+Cú pháp: `register <kiểu dữ liệu> <tên biến>;`
+
+Trong kiến trúc của vi xử lý thì ALU (Arithmetic Logic Unit) đóng vai trò xử lý các tính toán số học. Dữ liệu đưa vào làm việc với ALU phải chứa trong một vùng đặc biệt, gọi là các thanh ghi(register), và ALU chỉ làm việc với đống thanh ghi đó.
+
+Trong khi đó các biến khai báo trong chương trình thì đặt ở bộ nhớ ngoài (RAM chẳng hạn …). Do đó với khai báo biến thông thường, để thực hiện một phép tính thì cần có 3 bước.
+1. Nạp giá trị từ vùng nhớ chứa biến vào register
+2. Yêu cầu ALU xử lý register vừa được nạp giá trị.
+3. Đưa kết quả vừa xử lý của ALU ra ngoài vùng nhớ chứa biến.
+
+![](http://www.avr-asm-tutorial.net/avr_gra/sram.gif)
+
+Khi thêm từ khóa register để khai báo biến, thì tức là ta đã yêu cầu trình biên dịch ưu tiên đặc biệt dành luôn vùng register để chứa biến đó. Và hiển nhiên khi thực hiện tính toán trên biến đó thì giảm được bước 1 và 3, giảm bớt thủ tục vậy nên hiệu năng tăng lên.
+***
 </details>
 
 <details>
@@ -621,6 +691,208 @@ i = 3
 
 <details>
 <summary>Bài 7: Macro</summary>
+
+**1.** Khi ta sử dụng chỉ thị #include, nội dung chứa trong header file sẽ được sao chép vào file hiện tại.
+Khi include sử dụng dấu ngoặc nhọn < > thì preprocessor sẽ được dẫn tới Include Directory của Compiler.
+
+#include <file>
+
+Còn khi sử dụng dấu ngoặc kép " " thì preprocessor sẽ tìm kiếm file trong thư mục cùng chứa với file chương trình của bạn
+
+#include “file”
+***
+**2.**  Một Macro có thể coi là một loại viết tắt. Trước khi sử dụng một macro, bạn phải định nghĩa nó rõ ràng bằng chỉ thị #define, cấu trúc như ví dụ sau:
+
+`#define BUFFER_SIZE 1020`
+
+Ví dụ trên sẽ định nghĩa macro có tên ‘BUFFER_SIZE’ là viết tắt của ‘1020’.
+
+Nếu sau lệnh #define này có xuất hiện macro ‘BUFFER_SIZE’ thì bộ Preprocessor thay thế bằng ‘1020’.
+
+Ví dụ:
+```c
+#inclde <stdio.h>
+#define BUFFER_SIZE 1020
+int main()
+{
+printf(“buffer size is %d”, BUFFER_SIZE );
+return 0;
+}
+```
+Output: 
+```
+buffer size is 1020
+```
+***
+**3.** Macro có thể là hàm chứa các tham số, các tham số này sẽ không được kiểm tra kiểu dữ liệu.
+
+Ví dụ, macro INCREMENT(x) ở dưới, x có thể là bất cứ kiểu dữ liệu nào.
+```c
+#inclde <stdio.h>
+#define INCREMENT(x) ++x
+int main()
+{
+char *ptr = “12345”;
+int x = 99;
+printf(“%s\n”, INCREMENT(ptr));
+printf(“%d\n”, INCREMENT(x));
+return 0;
+}
+```
+Output:
+```
+2345
+100
+```
+***
+**4.** Preprocessor chỉ thực hiện thay thế các macro chứ không thực hiện các phép tính toán.
+
+Ta có ví dụ như sau:
+```c
+#include <stdio.h>
+#define CALC(X,Y) (X*Y)
+int main()
+{
+printf(“%d\n”,CALC(1+2, 3+4));
+return 0;
+}
+```
+Output:
+```
+11
+```
+Có thể thấy kết quả mong muốn là 21, tuy nhiên lại bằng 11.
+
+Bởi vì các tham số sẽ được tính toán sau khi được thay thế nên macro CALC(1+2,3+4) sẽ trở thành (1+2*3+4) = (1+6+4) =(11).
+
+Vậy để kết quả được tính đúng thì ta phải sửa lại như sau:
+```c
+#include <stdio.h>
+#define CALC(X,Y) (X)*(Y)
+int main()
+{
+printf(“%d\n”,CALC(1+2, 3+4));
+return 0;
+}
+```
+Output:
+```
+21
+```
+***
+**5.** Các tokens được truyền cho các macro có thể được nối bằng cách sử dụng toán tử ## (còn được gọi là toán tử Token-Pasting)
+
+Ví dụ:
+```c
+#include <stdio.h>
+#define merge(X,Y) X##Y
+int main()
+{
+printf(“%d\n”,merge(12, 34));
+return 0;
+}
+```
+Output:
+```
+1234
+```
+***
+**6.** Một token được truyền cho macro có thể được chuyển thành một chuỗi kí tự bằng cách sử dụng dấu # trước nó
+
+Ví dụ:
+```c
+#include <stdio.h>
+#define convert(a) #a
+int main()
+{
+printf(“%s”,convert(Hello!));
+return 0;
+}
+```
+Output:
+```
+Hello!
+```
+***
+**7.** Các macro có thể được viết trong nhiều dòng bằng cách sử dụng dấu ‘\’. Dòng cuối cùng không cần có dấu ‘\’.
+
+Ví dụ:
+```c
+#include <stdio.h>
+#define PRINT(i,limit) while (i<limit)     \
+                        {                  \
+                        printf(“123 ”);    \
+                        i++;               \
+                        }
+int main()
+{
+int i=0;
+PRINT(i,3);
+return 0;
+}
+```
+Output:
+```
+123 123 123
+```
+***
+**8.** Bộ Preprocessor có hỗ trợ các chỉ thị #if - #else nhằm sử dụng các macro làm các điều kiện thực thi lệnh
+
+Ví dụ:
+```c
+#include <stdio.h>
+#define NUMBER 3
+int main()
+{
+#if NUMBER >= 2
+printf(“Hello World!!!”);
+#else
+printf(“No define”);
+#endif
+}
+```
+Output:
+```
+Hello World!!!
+```
+***
+**9.** Một header file có thể được thêm vào nhiều hơn 1 lần, điều này sẽ dẫn đến khai báo lại nhiều biến, hàm giống nhau và xuất hiện lỗi khi biên dịch. Để tránh vấn đề này, nên sử dụng #defined, #ifdef và #ifndef
+
+Ví dụ:
+```c
+#include <stdio.h>
+#ifndef MATH_H
+#define MATH_H
+#include <math.h>
+int main()
+{
+int a=9;
+printf(“%d”, sqrt(a));
+}
+#endif
+```
+Output:
+```
+3.000000
+```
+***
+**10.** `__VA_ARGS__`
+
+Ví dụ:
+```c
+#define SUM(...) printf ("SUM: ", __VA_ARGS__)
+```
+Macro này gọi là variadic. Khi macro này được gọi, tất cả những thứ gì nằm trong dấu "..." sẽ được thay thế hết vào `__VA_ARGS__`.
+```c
+SUM(1 + 2);
+//Sẽ được thay thế thành:
+printf ("SUM: ", 1 + 2);
+```
+Output:
+```
+SUM: 3
+```
+***
 </details>
 
 <details>
