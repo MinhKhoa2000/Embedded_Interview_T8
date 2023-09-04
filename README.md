@@ -682,6 +682,113 @@ Khi thêm từ khóa register để khai báo biến, thì tức là ta đã yê
 <details>
 <summary>Bài 5: Struct/Union</summary>
 
+### 1. Struct
+Structure trong C là một kiểu dữ liệu do người dùng tự định nghĩa cho phép lưu trữ các loại phần tử khác nhau.
+
+Mỗi phần tử của một cấu trúc được gọi là một thành viên (member).
+
+Cú pháp:
+```c
+struct structure_name {
+    data_type member1;
+    data_type member2;
+    ...
+    data_type memeberN;
+};
+```
+Ví dụ:
+```c
+struct SinhVien {
+    int id;
+    char name[50];
+    char class[10];
+} sv1, sv2;
+```
+Ta có thể truy cập các thành viên trong con trỏ bằng cách khai báo toán tử `.` hoặc `->` (đối với con trỏ).
+
+Ví dụ:
+```c
+sv1.id = 100;
+sv1.name = "Nam";
+sv1.class = "ABC123";
+```
+***
+### 2. Union
+Cũng giống như structure, union trong C là kiểu dữ liệu do người dùng định nghĩa được sử dụng để chứa các loại phần tử khác nhau, nhưng nó cho cho phép các thành viên sử dụng chung địa chỉ.
+
+Điều này có nghĩa khi thay đổi giá trị một thành viên sẽ ảnh hưởng tới giá trị của các thành viên khác.
+
+Cú pháp:
+```c
+union union_name {
+    data_type member1;
+    data_type member2;
+    ...
+    data_type memeberN;
+};
+```
+Cách khai báo và truy cập các thành viên của union tương tự như khi sử dụng structure.
+***
+### 3. Tổ chức bộ nhớ của struct và union
+Cả struct và union đều được dùng lưu giá trị của nhiều đối tượng, tuy nhiên chúng có sự khác nhau về mặt quản lý bộ nhớ:
+- Mỗi thành viên trong struct được lưu trữ ở các vùng nhớ khác nhau. Kích thước của struct là tổng độ lớn của các vùng nhớ này.
+- Các thành viên trong union dùng chung một vùng nhớ. Kích thước của union bằng độ lớn của vùng nhớ này.
+
+**Đối với struct:**
+
+Ta xét ví dụ sau:
+```c
+#include <stdio.h>
+
+typedef struct
+{
+    int i;      // 4 byye
+    float f;    // 4 byte
+    char c[5];  // 4 byte + 1 byte + 3 byte padding = 8 byte
+} struct_Data;  // 4 + 4 + 8 = 16 byte
+
+int main()
+{
+    printf("size truct: %d\n", sizeof(struct_Data));
+}
+```
+Kết quả:
+```
+size truct: 16
+```
+Đối với struct trên, int có kích thước 4 byte, float là 4 byte, char là 1 byte, vì thế kích thước mong đợi là 4 + 4 + 5 = 13 byte. Tuy nhiên thực tế kích thước nhận được là 16 byte.
+
+Đầu tiên trình biên dịch sẽ lấy kích thước của kiểu dữ liệu lớn nhất (ở đây là 4 byte), sau đó cấp phát 1 block bằng đúng 4 byte cho biến i, cấp tiếp 4 byte cho biến f, đối với mảng c có 5 ký tự, trình biên dịch cấp 4 byte cho 4 ký tự đầu tiên, cấp tiếp 4 byte để lưu ký tự thứ 5 nên sẽ dư ra 3 byte đệm.
+
+Vì vậy struct trên sử dụng 13 byte và dư 3 byte, tổng là 16 byte.
+
+Ta xét thêm một ví dụ:
+```c
+typedef struct
+{
+    int i;      // 4 byye
+    char c1;    // 1 byte + 3 byte padding = 4 byte
+    char c2;    // 1 byte -> padding of c1 = 0 byte
+} struct_Data;  // 4 + 4 = 8 byte
+```
+Đối với ví dụ trên, kiểu dữ liệu có kích thước lớn nhất là int (4 byte). Tương tự như ví dụ đầu tiên, trình biên dịch sẽ cấp 1 block 4 byte cho biến i, cấp 4 byte tiếp theo cho biến c1. Do c1 chỉ sử dụng 1 byte nên còn dư 3 byte. Do còn dư 3 byte chưa sử dụng nên trình biên dịch sẽ "đẩy" biến c2 có kích thước 1 byte vào, dư lại 2 byte.
+
+Vì thế struct trên sử dụng 6 byte và dư 2 byte, tổng là 8 byte.
+
+**Đối với union**
+
+Xét ví dụ sau:
+```c
+typedef union
+{
+    int i;
+    char c[5];
+} union_Data;
+```
+Tương tự như struct, trình biên dịch chọn kích thước của của kiểu dữ liệu có kích thước lớn nhất để cấp phát ô nhớ.
+
+Đối với ví dụ trên, đầu tiên trình biên dịch cấp 4 byte nhớ, vừa đủ để lưu biến i nhưng lại dư ra 1 ký tự của mảng c. Trình biên dịch sẽ tiếp tục cấp thêm 4 byte để lưu ký tự này và dư ra 3 byte đệm. Tổng số byte được cấp cho union này là 8 byte.
+***
 </details>
 
 <details>
