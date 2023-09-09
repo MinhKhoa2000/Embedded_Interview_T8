@@ -224,7 +224,7 @@ void read_Number (char *number, uint8_t size)
 
 int main(int argc, char const *argv[])
 {
-    char number[] = "123123123123";
+    char number[] = "10101101101";
 
     printf("\nInput Number: %s\n", number);
 
