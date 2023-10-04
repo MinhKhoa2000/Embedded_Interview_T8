@@ -1,0 +1,1 @@
+bool RoomManager::canClean(list<Room>::iterator room) {
